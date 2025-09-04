@@ -25,11 +25,6 @@
 
 
 
-### ESLint Rules Guide
- ---
- This project is a hybrid of both javascript and typescript files. Hence a requirement to configure both js and ts rules.
- Js rules are used by default and an override is added for .ts and .tsx files
-
 #### 1. JS Rules
 ---
 ##### Plugins Used
