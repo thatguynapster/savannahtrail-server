@@ -7,6 +7,7 @@ import morgan from "morgan";
 import cors from "cors";
 import compression from "compression";
 import mongoosePaginate from "mongoose-paginate-v2";
+import { notFound, errorConverter, errorHandler } from "./src/middlewares/error-handler";
 
 // IMPORTANT for ESM: use .js extension for local imports
 import router from "./src/routes/routes";
@@ -99,6 +100,10 @@ app.use((req, res) => {
 });
 
 // Error handler
+app.use(notFound);
+app.use(errorConverter);
+app.use(errorHandler);
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);

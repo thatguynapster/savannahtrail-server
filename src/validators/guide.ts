@@ -10,7 +10,7 @@ export const CreateGuideValidate = async (
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
     bio: Joi.string().required(),
-    photo_url: Joi.string().uri(),
+    // photo_url: Joi.string().uri(),
     languages: Joi.array().items(Joi.string()).default([]),
     specialties: Joi.array().items(Joi.string()).default([]),
     status: Joi.string().valid("active", "inactive").default("inactive"),
