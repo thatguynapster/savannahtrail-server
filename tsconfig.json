@@ -1,0 +1,50 @@
+{
+    "compilerOptions": {
+        // Type checking
+        "strict": false,
+        "noImplicitAny": true,
+        "allowUnreachableCode": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": false,
+        "noImplicitReturns": false,
+        "noImplicitThis": false,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        // Modules
+        "module": "commonjs",
+        "resolveJsonModule": true,
+        // Emit
+        // JavaScript Support
+        "allowJs": true,
+        "checkJs": false,
+        // Editor Support
+        "sourceMap": true,
+        "outDir": "build",
+        // Interop Constraints
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        // Backwards Compatibility
+        // Language and Environment
+        "target": "es2016",
+        "lib": [
+            "ES2020"
+        ],
+        // Compiler Diagnostics
+        // Project
+        // Output Formatting
+        // Completeness
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "node_modules",
+        "build",
+        ".vscode",
+        ".husky",
+        ".git",
+        ".platform",
+        "public",
+        "views",
+        "util"
+    ]
+}

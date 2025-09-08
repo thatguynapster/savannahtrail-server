@@ -11,6 +11,9 @@ import {
 } from "mongoose";
 import moment from "moment";
 
+import mongoosePaginate from "mongoose-paginate-v2";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+
 export interface RefreshToken {
   _id: Types.ObjectId;
   token: string;
@@ -32,6 +35,9 @@ const RefreshTokenSchema = new Schema<RefreshToken>(
   },
   schemaOptions
 );
+
+RefreshTokenSchema.plugin(mongoosePaginate);
+RefreshTokenSchema.plugin(mongooseAggregatePaginate);
 
 const RefreshTokenModel: Model<RefreshToken> = model<RefreshToken>(
   "RefreshToken",

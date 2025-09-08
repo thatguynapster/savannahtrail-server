@@ -6,7 +6,7 @@ import { User }from "../models/User";
 
 
 export const login = async (email, password) => {
-  const user = users.find((u) => u.email === email && u.password === password);
+  const user = User.find((u) => u.email === email && u.password === password);
 
   if (!user) {
     throw new Error("Invalid email or password");

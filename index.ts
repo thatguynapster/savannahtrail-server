@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import mongoosePaginate from 'mongoose-paginate-v2';
 import compression from "compression";
-
+import router from './src/routes/routes';
 
 if (!process.env.NODE_ENV) {
     const result = dotenv.config();
@@ -84,7 +84,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 
+// Router
+app.use(router);
 
 app.listen(process.env.PORT, function () {
-    console.log(`Swoove Server Running on port: ${process.env.PORT}`);
+    console.log(`Savanna Server Running on port: ${process.env.PORT}`);
 });
