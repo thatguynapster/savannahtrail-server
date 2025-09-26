@@ -3,7 +3,7 @@ import { Booking } from "../models/Bookings";
 
 export const CreatereateBookingValidate = async (
     body: unknown
-  ): Promise<Booking> => {
+  ): Promise<Booking & {redirect_url : string}> => {
     const schema = Joi.object({
       package_id: Joi.string().required(),
       guest_name: Joi.string().required(),
@@ -15,11 +15,12 @@ export const CreatereateBookingValidate = async (
         name: Joi.string().default("").failover(""),
         price: Joi.number().min(0).default(0).failover(0),
       })).default([]),
+      redirect_url: Joi.string().uri(),
     });
   
     return (await schema.validateAsync(body, {
       abortEarly: false,
-    })) as Booking;
+    })) as Booking & {redirect_url : string};
   };
 
 

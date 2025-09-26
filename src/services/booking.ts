@@ -2,6 +2,7 @@
 import { FilterQuery, PipelineStage, Types } from 'mongoose';
 import BookingCollection , {Booking} from '..//models/Bookings'
 import { CreatePackageValidate, UpdatePackageValidate } from '../validators/package'
+import { getOnePackage } from './packages';
 
 
 function generateReference(prefix = "tour-INV"): string {
@@ -48,6 +49,11 @@ export const getBookingById = async (id: string) => {
 export const createBooking = async (data: Booking) => {
   const reference = generateReference();
 
+  const pkg = await getOnePackage({ _id: data.package_id });
+  if (!pkg) {
+    throw new Error("Invalid package_id");
+  }
+  
   const booking = await BookingCollection.create({
     reference,
     package_id: data.package_id,
@@ -59,6 +65,7 @@ export const createBooking = async (data: Booking) => {
     addons: data.addons, 
     payment_status: "pending",
     booking_status: "pending",
+    total_amount: (pkg.base_price ?? 0) + (data.num_guests || 1) + (data.addons?.reduce((sum, addon) => sum + (addon.price || 0), 0) || 0),
   });
 
   return booking;

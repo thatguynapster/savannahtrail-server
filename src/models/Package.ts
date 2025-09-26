@@ -79,7 +79,7 @@ import {
   PackageSchema.plugin(mongoosePaginate);
   PackageSchema.plugin(mongooseAggregatePaginate);
   
-  export const PackageModels = model<Package, PackageModel>(
+   const PackageModels = model<Package, PackageModel>(
     "Package",
     PackageSchema,
     "Packages"

@@ -35,6 +35,7 @@ export interface Booking {
   assigned_guide_name?: string;
   addons?: Addon[];
   created_at?: Date;
+  invoice_id: string;
 }
 
 export interface BookingModel extends Model<Booking> {
@@ -74,6 +75,7 @@ const BookingSchema = new Schema<Booking, BookingModel>(
     tour_date: { type: Date, index: true },
     num_guests: { type: Number, min: 1 },
     total_amount: { type: Number },
+    invoice_id: { type: String,  },
     payment_status: {
       type: String,
       enum: ["pending", "success", "failed", "refunded"],
