@@ -41,4 +41,8 @@ app.use("/api/v1.0/packages", packagesRouter);
 
 import { extensionRouter } from "./api/v1/extension";
 app.use("/api/v1.0/extensions", extensionRouter);
+
+import { authRouter } from "./api/v1/auth";
+app.use("/api/v1.0/auth", authRouter);
+
 export default app;

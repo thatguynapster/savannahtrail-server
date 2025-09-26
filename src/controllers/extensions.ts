@@ -39,7 +39,7 @@ export const uploadMultipleFilesControler = async (req: Request, res: Response, 
 
        const files = req.files as Express.Multer.File[];
 
-       const {  folder } = await uploadFileValidator(req.body);
+       const { file_name,  folder } = await uploadFileValidator(req.body);
 
        if (!files || files.length === 0) {
            return res.status(400).send({
@@ -53,7 +53,7 @@ export const uploadMultipleFilesControler = async (req: Request, res: Response, 
              files.map(async (file) => {
                  const details = await uploadImageToS3({
                      file: file.buffer,
-                     filename: file.originalname,
+                     filename: file_name ? file_name : file.originalname,
                      folder: folder ? folder : "others",
                  });
                  return details;

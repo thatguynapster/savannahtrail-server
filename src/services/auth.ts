@@ -1,54 +1,84 @@
-// import jwt from "jsonwebtoken";
-// import moment from "moment";
-// import RefreshTokenModel, { RefreshToken } from "../models/RefreshToken";
-// import { User }from "../models/User";
+import UserCollection from "../models/User";
+import bcrypt from "bcryptjs";
+import { signAccessToken, signRefreshToken, verifyToken } from "../functions/jwt";
 
+export const authenticateUser = async (email: string, password: string) => {
+    const user = await UserCollection.findOne({ email }).lean();
+    if (!user) return null;
+    const ok = await bcrypt.compare(password, user.password_hash);
+    if (!ok) return null;
 
+    const base = { sub: String(user._id), role: user.role, perms: user.permissions, tv: user.tokenVersion };
+    const token = signAccessToken(base);
+    const refresh = signRefreshToken(base);
 
-// export const login = async (email, password) => {
-//   const user = User.find((u) => u.email === email && u.password === password);
+    return {
+        user: {
+            id: String(user._id),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            permissions: user.permissions,
+            created_at: user.created_at,
+        },
+        token,
+        refresh,
+    };
+};
 
-//   if (!user) {
-//     throw new Error("Invalid email or password");
-//   }
+export const rotateRefreshToken = async (refreshToken: string) => {
+    // Rotation logic removed
+    const payload = verifyToken<any>(refreshToken);
+    const userId = payload.sub as string;
 
-//   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-//     expiresIn: "1h",
-//   });
-//   const expires_at = moment().add(1, "hour").toISOString();
+    const user = await UserCollection.findById(userId).lean();
+    if (!user) return null;
+    // Invalidate if tokenVersion changed
+    if (payload.tv !== user.tokenVersion) return null;
 
-//   const refreshToken = new RefreshTokenModel({
-//     token: jwt.sign({ userId: user._id }, process.env.JWT_REFRESH_SECRET),
-//     user_id: user._id,
-//   });
+    const base = { sub: String(user._id), role: user.role, perms: user.permissions, tv: user.tokenVersion };
+    const token = signAccessToken(base);
+    const newRefresh = signRefreshToken(base);
 
-//   await refreshToken.save();
+    return {
+        token,
+        refresh: newRefresh,
+        user: {
+            id: String(user._id),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            permissions: user.permissions,
+            created_at: user.created_at,
+        },
+    };
+};
 
-//   return { user, token, expires_at, refreshToken: refreshToken.token };
-// };
+export const logoutAllSessions = async (userId: string) => {
+    await UserCollection.findByIdAndUpdate(userId, { $inc: { tokenVersion: 1 } });
+};
 
-// export const logout = async (refreshToken: string) => {
-//   await RefreshTokenModel.deleteOne({ token: refreshToken });
-// };
+export const createUserService = async (input: { name?: string | null; email: string; password: string; role: "admin" | "operations" | "finance" | "support" | "guide"; permissions: string[] }) => {
+    const exists = await UserCollection.findOne({ email: input.email }).lean();
+    if (exists) throw new Error("User with this email already exists");
 
-// export const refreshToken = async (token: string) => {
-//   const refreshToken = await RefreshTokenModel.findOne({ token });
+    const password_hash = await bcrypt.hash(input.password, 12);
 
-//   if (!refreshToken) {
-//     throw new Error("Invalid refresh token");
-//   }
+    const doc = await UserCollection.create({
+        email: input.email,
+        name: input.name,
+        role: input.role,
+        permissions: input.permissions,
+        password_hash,
+    });
 
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-//     const userId = decoded.userId;
-
-//     const newToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
-//       expiresIn: "1h",
-//     });
-//     const expires_at = moment().add(1, "hour").toISOString();
-
-//     return { token: newToken, expires_at };
-//   } catch (error) {
-//     throw new Error("Invalid refresh token");
-//   }
-// };
+    // return safe/public fields only
+    return {
+        id: String(doc._id),
+        email: doc.email,
+        name: doc.name,
+        role: doc.role,
+        permissions: doc.permissions,
+        created_at: doc.created_at,
+    };
+};
