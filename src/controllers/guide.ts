@@ -132,24 +132,24 @@ export const createGuideController = async (
   try {
     const guideData = req.body;
 
-    if (!req.file) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No file uploaded" });
-    }
+    // if (!req.file) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "No file uploaded" });
+    // }
 
     //validation
     const guideBody = await CreateGuideValidate(guideData);
 
     //upload image to s3
-    const folder = "guides";
-    const result = await uploadImageToS3({
-      file: req.file.buffer,
-      filename: req.file.originalname,
-      folder,
-    });
+    // const folder = "guides";
+    // const result = await uploadImageToS3({
+    //   file: req.file.buffer,
+    //   filename: req.file.originalname,
+    //   folder,
+    // });
 
-    guideBody.photo_url = result.url;
+    // guideBody.photo_url = result.url;
     // Create guide
     const newGuide = await createGuide(guideBody);
 
