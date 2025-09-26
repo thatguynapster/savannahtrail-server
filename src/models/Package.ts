@@ -40,7 +40,7 @@ import {
       options?: PaginateOptions,
       callback?: (err: any, result: PaginateResult<Package>) => void
     ): Promise<PaginateResult<Package>>;
-    aggregatePaginate?(
+    aggregatePaginate(
       query?: any,
       options?: PaginateOptions,
       callback?: (err: any, result: PaginateResult<Package>) => void

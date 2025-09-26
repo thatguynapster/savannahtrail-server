@@ -32,4 +32,13 @@ app.use("/api/v1.0/bookings", bookingsRouter);
 
 import { guidesRouter } from "./api/v1/guide";
 app.use("/api/v1.0/guides", guidesRouter);
+
+import { packagesRouter } from "./api/v1/packages";
+app.use("/api/v1.0/packages", packagesRouter);
+
+// import { usersRouter } from "./api/v1/user";
+// app.use("/api/v1.0/users", usersRouter);
+
+import { extensionRouter } from "./api/v1/extension";
+app.use("/api/v1.0/extensions", extensionRouter);
 export default app;
