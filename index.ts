@@ -11,6 +11,7 @@ import { notFound, errorConverter, errorHandler } from "./src/middlewares/error-
 
 // IMPORTANT for ESM: use .js extension for local imports
 import router from "./src/routes/routes";
+import { kpiUpdateJob } from "./src/jobs/kpi-updater";
 
 // --- Environment ---
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -38,6 +39,11 @@ mongoose.set("strictQuery", true);
     mongoose.connection.on("connected", () => console.log("Database Connection Established"));
     mongoose.connection.on("error", (err) => console.error("Database Connection Error:", err));
     mongoose.connection.on("reconnected", () => console.log("Database Connection Reconnected"));
+
+    if (NODE_ENV === 'production') {
+        kpiUpdateJob.start();
+        console.log('KPI update job scheduled.');
+    }
   } catch (err) {
     console.error("Error connecting Database:", err);
     process.exit(1);

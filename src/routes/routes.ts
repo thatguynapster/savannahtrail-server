@@ -36,4 +36,7 @@ app.use("/api/v1.0/guides", guidesRouter);
 import packageRoutes from "./api/v1/package";
 app.use("/api/v1.0/packages", packageRoutes);
 
+import dashboardRoutes from "./dashboard";
+app.use("/api/v1.0/dashboard", dashboardRoutes);
+
 export default app;
