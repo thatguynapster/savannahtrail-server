@@ -8,7 +8,6 @@ import cors from "cors";
 import compression from "compression";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { notFound, errorConverter, errorHandler } from "./src/middlewares/error-handler";
-import { kpiUpdateJob } from "./src/services/kpi-updater";
 // IMPORTANT for ESM: use .js extension for local imports
 import router from "./src/routes/routes";
 
@@ -39,10 +38,6 @@ mongoose.set("strictQuery", true);
 
         mongoose.connection.on("error", (err) => console.error("Database Connection Error:", err));
         mongoose.connection.on("reconnected", () => console.log("Database Connection Reconnected"));
-        if (NODE_ENV === "production") {
-            kpiUpdateJob.start();
-            console.log("KPI update job scheduled.");
-        }
     } catch (err) {
         console.error("Error connecting Database:", err);
         process.exit(1);
