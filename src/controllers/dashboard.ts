@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import * as dashboardService from "../services/dashboard";
 import { validateGetKpisQuery } from "../validators/dashboard";
 import Joi from "joi";
 
-export const getKpis = async (req: Request, res: Response) => {
+export const getKpis = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const validatedQuery = await validateGetKpisQuery(req.query);
 
@@ -18,7 +18,7 @@ export const getKpis = async (req: Request, res: Response) => {
             }));
             res.status(400).json({ errors });
         } else {
-            throw error;
+            next(error);
         }
     }
 };
