@@ -45,4 +45,7 @@ app.use("/api/v1.0/extensions", extensionRouter);
 import { authRouter } from "./api/v1/auth";
 app.use("/api/v1.0/auth", authRouter);
 
+import { dashboardRouter } from "./api/v1/dashboard";
+app.use("/api/v1.0/dashboard", dashboardRouter);
+
 export default app;
