@@ -68,6 +68,7 @@ export const uploadMultipleFilesControler = async (req: Request, res: Response, 
             responses: uploadDetails,
         });
     } catch (err) {
+        console.log(err);
         next(err);
     }
 };
