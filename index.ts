@@ -63,7 +63,7 @@ mongoosePaginate.paginate.options = {
 const app = express();
 
 app.use(morgan(NODE_ENV === "production" ? "combined" : "dev"));
-app.use(express.json({ limit: "100mb" })); // once is enough
+app.use(express.json({ limit: "900mb" })); // once is enough
 app.use(compression());
 
 // CORS
