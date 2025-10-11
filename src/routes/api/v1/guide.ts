@@ -1,6 +1,6 @@
 import multer from "multer";
 import express from "express";
-import { createGuideController, paginateGuidesController } from "../../../controllers/guide";
+import { createGuideController, getGuideByIdController, paginateGuidesController } from "../../../controllers/guide";
 
 const app = express();
 
@@ -10,4 +10,5 @@ app.get("/", paginateGuidesController);
 app.post("/", upload.single("image"), createGuideController);
 
 app.get("/available", paginateGuidesController);
+app.get("/:id", getGuideByIdController);
 export { app as guidesRouter };
