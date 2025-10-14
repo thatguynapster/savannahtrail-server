@@ -7,8 +7,8 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
 app.get("/", paginateGuidesController);
+app.get("/get-guide/:id", getGuideByIdController);
 app.post("/", upload.single("image"), createGuideController);
 
 app.get("/available", paginateGuidesController);
-app.get("/:id", getGuideByIdController);
 export { app as guidesRouter };
