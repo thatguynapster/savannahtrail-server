@@ -9,6 +9,8 @@ export const getAllPackagesController = async (req: Request, res: Response, next
     try {
         const { page = 1, limit = 10, ...filters } = req.query;
         const options = {
+            page: parseInt(page as string, 10),
+            limit: parseInt(limit as string, 10),
             sort: { _id: -1 },
             lean: true,
             customLabels: {
@@ -22,7 +24,7 @@ export const getAllPackagesController = async (req: Request, res: Response, next
                 prevPage: false,
                 nextPage: false,
             },
-            pagination: false,
+            pagination: true, // had to set this to true so the limit would work
         };
 
         const match_query = {} as FilterQuery<Package>;
@@ -177,7 +179,6 @@ export const updatePackageByIdController = async (req: Request, res: Response, n
         next(err);
     }
 };
-
 
 export const deletePackageByIdController = async (req: Request, res: Response, next: NextFunction) => {
     try {
